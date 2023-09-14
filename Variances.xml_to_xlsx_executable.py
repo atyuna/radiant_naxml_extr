@@ -5,10 +5,10 @@ import time
 
 try:
     # Prompt the user to enter the XML file location
-    xml_file_path = input("Please Enter the path to the MSM.xml file: ")
+    xml_file_path = input("Please Enter the path to the MSM.xml file in format C:\Folder\msm_file.xml: ")
 
     # Prompt the user to enter the XLS file location
-    xls_file_path = input("Please Enter the path where you want to store XLS file: ")
+    xls_file_path = input("Please Enter the path to the new spreadsheet file in format C:\Folder\msm_newname.xlsx: ")
 
     # Parse the XML file
     with open(xml_file_path) as file:
@@ -108,7 +108,7 @@ try:
     # Display a completion message
     print("Your spreadsheet is ready - check it in the folder.")
 
-    # Add a 30-second delay
+    # Add a 10-second delay
     time.sleep(10)
 
 except Exception as e:
