@@ -6,9 +6,6 @@ from openpyxl.styles import NamedStyle
 import time
 
 try:
-    # # Specify the path to your XML file
-    # xml_file_path = r"C:\Users\Hanna.Sabadosh\NAXML\NAXML-POSJournal_Closed_2023-07-31_1of1_7.31.2023.xml"
-
     # Prompt the user to enter the XML file location
     xml_file_path = input("Please Enter the path to the Transaction Journal in format C:\Folder\File.xml: ")
 
@@ -36,7 +33,7 @@ try:
 
     # Write the column headers
     headers = [
-        "Trans #", "MOP", "Description", "Item Type", "Gallons Used",
+        "Trans #", "MOP", "Fuel Grade", "PPG Before", "PPG After", "Gallons Used",
         "Fuel $ ", "Merch Sales $", "Tax", "Credit", "Debit", "Cash", "EBT CASH", "EBT FOOD", "Cash Back", "Discount Amount", "Discount Reason"
     ]
     sheet.append(headers)
@@ -49,8 +46,9 @@ try:
         # Find the elements within each SaleEvent
         transaction_id = sale_event.find(".//ns0:TransactionID", namespace)
         card_descr = sale_event.find(".//radiant:ShorterDescription", namespace)
-        description = sale_event.find(".//ns0:Description", namespace)
-        item_type = sale_event.find(".//ns0:ItemTypeCode", namespace)
+        description = sale_event.find(".//ns0:FuelLine/ns0:Description", namespace)
+        ppg_before = sale_event.find(".//ns0:FuelLine/ns0:RegularSellPrice", namespace)
+        ppg_after = sale_event.find(".//ns0:FuelLine/ns0:ActualSalesPrice", namespace)
         sales_quantity = sale_event.find(".//ns0:SalesQuantity[@uom='gallonUS']", namespace)
         # Find the fuel amounts (within FuelLine) and merchandise amounts (within ItemLine)
         fuel_amount = sale_event.find(".//ns0:FuelLine/ns0:SalesAmount", namespace)
@@ -70,7 +68,8 @@ try:
             transaction_id.text if transaction_id is not None else "",
             card_descr.text if card_descr is not None else "Cash",
             description.text if description is not None else "",
-            item_type.text if item_type is not None else "",
+            ppg_before.text if description is not None else "",
+            ppg_after.text if description is not None else "",
             sales_quantity.text if sales_quantity is not None else "",
             fuel_amount.text if fuel_amount is not None else "",
             total_merch_amount if total_merch_amount != 0 else "",
@@ -148,7 +147,6 @@ try:
 
 
     # # Save the workbook to a file
-    # excel_file_path = r"C:\Users\Hanna.Sabadosh\Extracted\07.31_Steven.xlsx"
     workbook.save(excel_file_path)
 
     print("Data has been written to the Excel file.")
